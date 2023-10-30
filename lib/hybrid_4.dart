@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+
 List<Map<String, String>> getNameAndID(List<dynamic> dataList) {
 
   List<Map<String, String>> extractedData = [];
@@ -13,4 +16,16 @@ List<Map<String, String>> getNameAndID(List<dynamic> dataList) {
   }
 
   return extractedData;
+}
+
+Future<List<dynamic>> fetchData(String base, String path, Map<String, String> params) async {
+  try {
+    var uri = Uri.https(base, path, params);
+    var response = await http.get(uri);
+    var json = convert.jsonDecode(response.body) as List<dynamic>;
+    return json;
+  } catch (err) {
+    print('Error fetching data: $err');
+    return List<dynamic>.empty();
+  }
 }
