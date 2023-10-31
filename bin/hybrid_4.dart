@@ -6,7 +6,7 @@ void main(List<String> arguments) async {
   String path = '/api/v2/users';
   Map<String, String> params = {'size': '10'};
 
-  List<dynamic> jsonList = await utils.fetchData(base, path, params);
+  List<Map<String, dynamic>> jsonList = await utils.fetchData(base, path, params);
   List<Map<String, String>> userList = utils.getNameAndID(jsonList);
 
   for (var user in userList) {

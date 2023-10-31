@@ -18,21 +18,21 @@ List<Map<String, String>> getNameAndID(List<dynamic> dataList) {
   return extractedData;
 }
 
-Future<List<dynamic>> fetchData(String base, String path, Map<String, String> params) async {
+Future<List<Map<String, dynamic>>> fetchData(String base, String path, Map<String, String> params) async {
   try {
     var uri = Uri.https(base, path, params);
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var json = convert.jsonDecode(response.body) as List<dynamic>;
-      return convertToStrings(json);
+      return assertMapList(json);
     } else {
       String error = response.statusCode.toString();
       print('Error fetching data: status code $error');
-      return List<dynamic>.empty();
+      return List<Map<String, dynamic>>.empty();
     }
   } catch (err) {
     print('Error fetching data: $err');
-    return List<dynamic>.empty();
+    return List<Map<String, dynamic>>.empty();
     //if try-catch is done here, then any thrown error will stop here, making wrapping it in main as well unnecessary
   }
 
@@ -41,12 +41,9 @@ Future<List<dynamic>> fetchData(String base, String path, Map<String, String> pa
 }
 
 
-List<Map<String, String>> convertToStrings(List<dynamic> jsonList) {
-  return List<Map<String, String>>.from(jsonList.map((dynamic item) {
-    Map<String, String> newMap = {};
-    item.forEach((key, value) {
-      newMap[key] = value.toString();
-    });
-    return newMap;
-  }));
+List<Map<String, dynamic>> assertMapList(List<dynamic> jsonList) {
+  return List<Map<String, dynamic>>.from(jsonList.map((dynamic item) {
+      return Map<String, dynamic>.from(item); 
+    }));
+    //returning as string, dynamic as there are objects within objects in this JSON
 }
