@@ -10,12 +10,8 @@ void main(List<String> arguments) async {
   var userList = utils.getNameAndID(json);
 
   for (var item in userList) {
-    var uid = item['uid'];
-    var firstName = item['first_name'];
-    var lastName = item['last_name'];
+    var { 'uid': uid, 'first_name': firstName, 'last_name': lastName } = item; //for map destructuring
     print('$firstName $lastName, id #$uid\n');
   }
   
 }
-
-
