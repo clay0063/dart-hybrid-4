@@ -10,8 +10,7 @@ Future<List<Map<String, String>>> fetchData(String base, String path, Map<String
       return convertToJSON(json);
     } else {
       String error = response.statusCode.toString();
-      print('Error fetching data: status code $error');
-      return List<Map<String, String>>.empty();
+      throw 'Error fetching data: Status code $error';
     }
   } catch (err) {
     print('Error fetching data: $err');
