@@ -8,11 +8,12 @@ void main(List<String> arguments) async {
 
   List<Map<String, String>> jsonList = await utils.fetchData(base, path, params);
 
-  for (var item in jsonList) {
-    String uid = item['uid'] ?? 'NO UID';
-    String firstName = item['first_name'] ?? 'NO NAME';
-    String lastName = item['last_name'] ?? 'NO SURNAME';
+  for (var user in jsonList) {
+    String uid = user['uid'] ?? 'NO UID';
+    String firstName = user['first_name'] ?? 'NO NAME';
+    String lastName = user['last_name'] ?? 'NO SURNAME';
     print('ID #$uid\t$firstName $lastName\n');
   }
+
   
 }
