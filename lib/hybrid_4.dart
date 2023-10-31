@@ -7,7 +7,7 @@ List<Map<String, String>> getNameAndID(List<dynamic> dataList) {
   
   for (var item in dataList) {
     Map<String, String> extractedItem = Map<String, String>.from({
-      'uid': item['uid'].toString(), 
+      'uid': item['uid'],
       'first_name': item['first_name'], 
       'last_name': item['last_name']
       });
@@ -45,5 +45,10 @@ List<Map<String, dynamic>> assertMapList(List<dynamic> jsonList) {
   return List<Map<String, dynamic>>.from(jsonList.map((dynamic item) {
       return Map<String, dynamic>.from(item); 
     }));
-    //returning as string, dynamic as there are objects within objects in this JSON
+    /*
+    //can convert everything to String, String with:
+    Map<String, String> newMap = {};
+    item.forEach((key, value) { newMap[key] = value.toString(); });
+    return newMap;
+    */
 }
