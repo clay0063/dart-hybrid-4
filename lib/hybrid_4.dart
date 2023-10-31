@@ -1,20 +1,38 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-Future<List<Map<String, String>>> fetchData(String base, String path, Map<String, String> params) async {
+List<Map<String, String>> getNameAndID(List<dynamic> dataList) {
+  //asserting that the fetch is a List<dynamic> prevents it from fetching only 0 or 1 items
+  List<Map<String, String>> extractedData = [];
+  
+  for (var item in dataList) {
+    Map<String, String> extractedItem = Map<String, String>.from({
+      'uid': item['uid'].toString(), 
+      'first_name': item['first_name'], 
+      'last_name': item['last_name']
+      });
+
+    extractedData.add(extractedItem);
+  }
+
+  return extractedData;
+}
+
+Future<List<dynamic>> fetchData(String base, String path, Map<String, String> params) async {
   try {
     var uri = Uri.https(base, path, params);
     var response = await http.get(uri);
     if (response.statusCode == 200) {
       var json = convert.jsonDecode(response.body) as List<dynamic>;
-      return convertToJSON(json);
+      return convertToStrings(json);
     } else {
       String error = response.statusCode.toString();
-      throw 'Error fetching data: Status code $error';
+      print('Error fetching data: status code $error');
+      return List<dynamic>.empty();
     }
   } catch (err) {
     print('Error fetching data: $err');
-    return List<Map<String, String>>.empty();
+    return List<dynamic>.empty();
     //if try-catch is done here, then any thrown error will stop here, making wrapping it in main as well unnecessary
   }
 
@@ -22,8 +40,8 @@ Future<List<Map<String, String>>> fetchData(String base, String path, Map<String
   //and then Uri.https will automatically not include a null params
 }
 
-List<Map<String, String>> convertToJSON(List<dynamic> jsonList) {
-  //asserting that the fetch is a List<dynamic> prevents it from fetching only 0 or 1 items
+
+List<Map<String, String>> convertToStrings(List<dynamic> jsonList) {
   return List<Map<String, String>>.from(jsonList.map((dynamic item) {
     Map<String, String> newMap = {};
     item.forEach((key, value) {
