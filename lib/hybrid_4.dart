@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 List<Map<String, String>> getNameAndID(List<dynamic> dataList) {
-  //asserting that the fetch is a List<dynamic> prevents it from fetching only 0 or 1 items
+  //asserting that the fetch is a List<dynamic> prevents it from saving only 0 or 1 items
   List<Map<String, String>> extractedData = [];
   
   for (var item in dataList) {
@@ -27,8 +27,7 @@ Future<List<Map<String, dynamic>>> fetchData(String base, String path, Map<Strin
       return assertMapList(json);
     } else {
       String error = response.statusCode.toString();
-      print('Error fetching data: status code $error');
-      return List<Map<String, dynamic>>.empty();
+      throw error;
     }
   } catch (err) {
     print('Error fetching data: $err');
@@ -50,5 +49,6 @@ List<Map<String, dynamic>> assertMapList(List<dynamic> jsonList) {
     Map<String, String> newMap = {};
     item.forEach((key, value) { newMap[key] = value.toString(); });
     return newMap;
+    //but there is multiple types of possible data in the returned json
     */
 }
